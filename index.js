@@ -16,6 +16,11 @@ const medias = {
   
   const FPS = 30;
   
+  const base_name = 'image/fish'
+  const fish_num = 50;
+  let cnt = 0;
+  let cnt_tmp = 0;
+  
   promise.then(successCallback)
          .catch(errorCallback);
   
@@ -28,14 +33,22 @@ const medias = {
     canvas.width = width;
     canvas.height = height;
 
-    const image = new Image();
-    image.src = 'image/frame1.png';
+    // const image = new Image();
+    const image = [];
+    for(let i=0; i<fish_num; i++){
+      image.push(new Image());
+      image[i].src = base_name + String(i) + '.png';
+    }
   
     processVideo();
   
     function processVideo() {
       try{
         const begin = Date.now();
+        if(cnt_tmp%3==0){
+          cnt = (cnt+1)%fish_num;
+        }
+        cnt_tmp ++;
   
         if(width != video.clientWidth || height != video.clientHeight){
           width = video.clientWidth;
@@ -45,7 +58,7 @@ const medias = {
         }
   
         ctx.drawImage(video, 0, 0, width, height, 0, 0, canvas.width, canvas.height);
-        ctx.drawImage(image , 0, 0, 480, 639, 0, 0, canvas.width, canvas.height);
+        ctx.drawImage(image[cnt] , 0, 0, 900, 600, 0, 0, canvas.width, canvas.height);
   
         let delay = 1000 / FPS - (Date.now() - begin);
         if(delay<0){
